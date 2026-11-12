@@ -1,0 +1,34 @@
+{
+  "goal": "Який код помилки та формат тіла відповіді обрати для конфлікту версій ресурсу?",
+  "status": "SUCCESS",
+  "final_answer": "Для розв'язання конфлікту версій ресурсу використовується код HTTP `409 Conflict` (або `412 Precondition Failed` за наявності умовного заголовка `If-Match`). Тіло відповіді формується у форматі Problem Details, де обов'язково передаються поля `currentVersion` та `providedVersion`, що зафіксовано у [[Version-Conflict-Resolution#Ключові положення]].",
+  "steps": [
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "конфлікт версій обробка etag"
+      },
+      "observation": "<fragment source=\"[[Version Conflict Resolution#Version Conflict Resolution]]\" path=\"04-Security-and-Errors/Version-Conflict-Resolution.md\" distance=\"0.507\">\nСтратегії виявлення та вирішення конфліктів одночасного редагування ресурсів у REST API.\n</fragment>\n\n<fragment source=\"[[Rate Limiting and 42...",
+      "thought": "Шукаю нотатки про конфлікти версій"
+    },
+    {
+      "step": 2,
+      "action": "read_note",
+      "args": {
+        "path": "04-Security-and-Errors/Version-Conflict-Resolution.md"
+      },
+      "observation": "<note source=\"[[Version Conflict Resolution]]\" path=\"04-Security-and-Errors/Version-Conflict-Resolution.md\" tags=\"конфлікти, версіонування, etag, rest\" links=\"Error-Status-Codes-Mapping, RFC-7807-Problem-Details, State-Machine-and-Conflict-Handling\">\n# Version Conflict Resolution\n\nСтратегії виявленн...",
+      "thought": "Читаю повну нотатку 04-Security-and-Errors/Version-Conflict-Resolution.md для деталізації"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "args": {
+        "answer": "Для розв'язання конфлікту версій ресурсу використовується код HTTP `409 Conflict` (або `412 Precondition Failed` за наявності умовного заголовка `If-Match`). Тіло відповіді формується у форматі Problem Details, де обов'язково передаються поля `currentVersion` та `providedVersion`, що зафіксовано у [[Version-Conflict-Resolution#Ключові положення]]."
+      },
+      "observation": "FINISHED",
+      "thought": "Сформовано обґрунтовану фінальну відповідь"
+    }
+  ]
+}

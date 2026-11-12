@@ -1,0 +1,34 @@
+{
+  "goal": "Який код помилки та формат тіла відповіді обрати для конфлікту версій ресурсу?",
+  "status": "SUCCESS",
+  "final_answer": "Для розв'язання конфлікту версій ресурсу використовується код HTTP `409 Conflict` (або `412 Precondition Failed` за наявності умовного заголовка `If-Match`). Тіло відповіді формується у форматі Problem Details, де обов'язково передаються поля `currentVersion` та `providedVersion`, що зафіксовано у [[Version-Conflict-Resolution#Ключові положення]].",
+  "steps": [
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "конфлікт версій обробка etag"
+      },
+      "observation": "<fragment source=\"[[Version Conflict Resolution#Version Conflict Resolution]]\" path=\"04-Security-and-Errors/Version-Conflict-Resolution.md\" distance=\"0.507\">\nСтратегії виявлення та вирішення конфліктів одночасного редагування ресурсів у REST API.\n</fragment>\n\n<fragment source=\"[[Rate Limiting and 429#Rate Limiting and 429]]\" path=\"04-Security-and-Errors/Rate-Limiting-and-429.md\" distance=\"0.534\">\nЗахист сервісу Nom-Nom-Save від перевантаження, DoS-атак та брутфорсу облікових записів.\n</fragment>",
+      "thought": "Шукаю нотатки про конфлікти версій"
+    },
+    {
+      "step": 2,
+      "action": "read_note",
+      "args": {
+        "path": "04-Security-and-Errors/Version-Conflict-Resolution.md"
+      },
+      "observation": "<note source=\"[[Version Conflict Resolution]]\" path=\"04-Security-and-Errors/Version-Conflict-Resolution.md\" tags=\"конфлікти, версіонування, etag, rest\" links=\"Error-Status-Codes-Mapping, RFC-7807-Problem-Details, State-Machine-and-Conflict-Handling\">\n# Version Conflict Resolution\n\nСтратегії виявлення та вирішення конфліктів одночасного редагування ресурсів у REST API.\n\n## Ключові положення\n- **Проблема «втраченого оновлення» (Lost Update)**: коли два оператори ресторану одночасно редагують залишок страв в одному боксі, перезаписуючи зміни один одного.\n- **Умовні запити за RFC 9110**:\n  - Сервер надає заголовок `ETag: W/\"v4-hash\"` при читанні сутності.\n  - При оновленні (`PUT` чи `PATCH`) клієнт обов'язково надсилає заголовок `If-Match: W/\"v4-hash\"`.\n  - Якщо сутність уже змінилася, сервер відхиляє запит кодом `412 Precondition Failed` або `409 Conflict`.\n- **Формат тіла відповіді при конфлікті версій**:\n  Повертається об'єкт Problem Details, що містить поточну актуальну версію ресурсу (`currentVersion`) та версію клієнта (`providedVersion`), дозволяючи клієнту виконати 3-way merge або запитати користувача.\n\n## Приклад\n```json\n{\n  \"type\": \"https://api.nomnomsave.ua/errors/version-conflict\",\n  \"title\": \"Version Conflict\",\n  \"status\": 409,\n  \"detail\": \"The resource has been modified by another process. Your version: v4, current version: v5.\",\n  \"instance\": \"/api/v1/boxes/bx_102\"\n}\n```\n\n## Пов'язані нотатки\n- State-Machine-and-Conflict-Handling\n- RFC-7807-Problem-Details\n- Error-Status-Codes-Mapping\n</note>",
+      "thought": "Читаю повну нотатку 04-Security-and-Errors/Version-Conflict-Resolution.md для деталізації"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "args": {
+        "answer": "Для розв'язання конфлікту версій ресурсу використовується код HTTP `409 Conflict` (або `412 Precondition Failed` за наявності умовного заголовка `If-Match`). Тіло відповіді формується у форматі Problem Details, де обов'язково передаються поля `currentVersion` та `providedVersion`, що зафіксовано у [[Version-Conflict-Resolution#Ключові положення]]."
+      },
+      "observation": "FINISHED",
+      "thought": "Сформовано обґрунтовану фінальну відповідь"
+    }
+  ]
+}

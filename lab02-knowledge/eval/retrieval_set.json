@@ -1,0 +1,100 @@
+[
+  {
+    "id": "Q1",
+    "query": "Які методи HTTP вважаються ідемпотентними згідно зі стандартом?",
+    "expected": [
+      "01-Standards-and-Specs/RFC-9110-HTTP-Semantics.md",
+      "02-Architecture-and-Design/Idempotency-and-Safe-Methods.md"
+    ],
+    "category": "standards"
+  },
+  {
+    "id": "Q2",
+    "query": "Як оформити тіло помилки у форматі Problem Details за RFC 7807?",
+    "expected": [
+      "01-Standards-and-Specs/RFC-7807-Problem-Details.md"
+    ],
+    "category": "errors"
+  },
+  {
+    "id": "Q3",
+    "query": "Який код помилки та формат тіла відповіді обрати для конфлікту версій ресурсу?",
+    "expected": [
+      "04-Security-and-Errors/Version-Conflict-Resolution.md",
+      "02-Architecture-and-Design/State-Machine-and-Conflict-Handling.md"
+    ],
+    "category": "type-b-synthesis"
+  },
+  {
+    "id": "Q4",
+    "query": "Як побудовано життєвий цикл та стейт-машину замовлень у Nom-Nom-Save?",
+    "expected": [
+      "03-NomNomSave-API/Orders-API-and-FSM.md",
+      "02-Architecture-and-Design/State-Machine-and-Conflict-Handling.md"
+    ],
+    "category": "nomnomsave"
+  },
+  {
+    "id": "Q5",
+    "query": "Як захистити сесію від CSRF і викрадення cookie одночасно?",
+    "expected": [
+      "04-Security-and-Errors/CSRF-and-CORS-Protection.md",
+      "03-NomNomSave-API/Authentication-and-JWT-Handling.md"
+    ],
+    "category": "security"
+  },
+  {
+    "id": "Q6",
+    "query": "Які стандартні заголовки використовуються при обмеженні кількості запитів 429?",
+    "expected": [
+      "04-Security-and-Errors/Rate-Limiting-and-429.md"
+    ],
+    "category": "security"
+  },
+  {
+    "id": "Q7",
+    "query": "Які ендпоінти та фільтри підтримує підсистема пошуку боксів?",
+    "expected": [
+      "03-NomNomSave-API/Boxes-API-Design.md"
+    ],
+    "category": "nomnomsave"
+  },
+  {
+    "id": "Q8",
+    "query": "У чому полягає різниця між безпечними та ідемпотентними методами?",
+    "expected": [
+      "02-Architecture-and-Design/Idempotency-and-Safe-Methods.md",
+      "01-Standards-and-Specs/RFC-9110-HTTP-Semantics.md"
+    ],
+    "category": "architecture"
+  },
+  {
+    "id": "Q9",
+    "query": "Як забезпечити збереження стану без збереження сесії на сервері в REST?",
+    "expected": [
+      "02-Architecture-and-Design/REST-Architectural-Constraints.md",
+      "03-NomNomSave-API/Authentication-and-JWT-Handling.md"
+    ],
+    "category": "architecture"
+  },
+  {
+    "id": "Q10",
+    "query": "Як верифікувати автентичність вхідних вебхуків через підпис HMAC?",
+    "expected": [
+      "03-NomNomSave-API/Webhooks-and-Subscriptions.md"
+    ],
+    "category": "nomnomsave"
+  },
+  {
+    "id": "Q11-OUT",
+    "query": "Як налаштувати компілятор C++ під архітектуру ARM Cortex-M4?",
+    "expected": [],
+    "category": "out-of-domain"
+  },
+  {
+    "id": "Q12-OUT",
+    "query": "Які інгредієнти входять до класичного рецепту неаполітанської піци?",
+    "expected": [],
+    "category": "out-of-domain"
+  }
+]

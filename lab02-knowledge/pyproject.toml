@@ -1,0 +1,16 @@
+[project]
+name = "kb-agent"
+version = "1.0.0"
+description = "AI Agent connected to Obsidian knowledge base and Chroma vector store (Lab 02)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "python-frontmatter>=1.1.0",
+    "chromadb>=0.5.0",
+    "python-dotenv>=1.0.0",
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

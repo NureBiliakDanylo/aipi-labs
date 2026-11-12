@@ -1,0 +1,34 @@
+{
+  "goal": "Як захистити сесію користувача від CSRF і одночасно запобігти викраденню cookie?",
+  "status": "SUCCESS",
+  "final_answer": "Одночасний захист від CSRF та викрадення сесії базується на розділенні токенів та налаштуваннях CORS. Згідно з [[CSRF-and-CORS-Protection#Ключові положення]], конфігурація CORS суворо обмежує `Access-Control-Allow-Origin` дозволеними доменами без wildcard, а токени оновлення ізолюються в cookie з атрибутом `SameSite=Strict`.",
+  "steps": [
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "CSRF and CORS Protection механізми захисту"
+      },
+      "observation": "<fragment source=\"[[CSRF and CORS Protection#CSRF and CORS Protection]]\" path=\"04-Security-and-Errors/CSRF-and-CORS-Protection.md\" distance=\"0.127\">\nМеханізми захисту від підробки міжсайтових запитів (CSRF) та політика безпечного спільного використання ресурсів між різними джерелами (CORS).\n</fragment>\n\n<fragment source=\"[[CSRF and CORS Protection#Пов'язані нотатки]]\" path=\"04-Security-and-Errors/CSRF-and-CORS-Protection.md\" distance=\"0.248\">\n- Authentication-and-JWT-Handling\n- Rate-Limiting-and-429\n- REST-Architectural-Constraints\n</fragment>\n\n<fragment source=\"[[CSRF and CORS Protection#Приклад]]\" path=\"04-Security-and-Errors/CSRF-and-CORS-Protection.md\" distance=\"0.343\">\nБраузер клієнта перед виконанням `POST /api/v1/orders` надсилає автоматичний передзапит:\n```http\nOPTIONS /api/v1/orders HTTP/1.1\nOrigin: https://app.nomnomsave.ua\nAccess-Control-Request-Method: POST\n```\nСервер відповідає `204 No Content` із відповідними CORS-заголовками.\n</fragment>\n\n<fragment source=\"[[Rate Limiting and 429#Пов'язані нотатки]]\" path=\"04-Security-and-Errors/Rate-Limiting-and-429.md\" distance=\"0.402\">\n- Error-Status-Codes-Mapping\n- CSRF-and-CORS-Protection\n- Authentication-and-JWT-Handling\n</fragment>",
+      "thought": "Шукаю механізми захисту CSRF та CORS"
+    },
+    {
+      "step": 2,
+      "action": "read_note",
+      "args": {
+        "path": "04-Security-and-Errors/CSRF-and-CORS-Protection.md"
+      },
+      "observation": "<note source=\"[[CSRF and CORS Protection]]\" path=\"04-Security-and-Errors/CSRF-and-CORS-Protection.md\" tags=\"безпека, cors, csrf, owasp\" links=\"Authentication-and-JWT-Handling, REST-Architectural-Constraints, Rate-Limiting-and-429\">\n# CSRF and CORS Protection\n\nМеханізми захисту від підробки міжсайтових запитів (CSRF) та політика безпечного спільного використання ресурсів між різними джерелами (CORS).\n\n## Ключові положення\n- **Захист від CSRF**:\n  - Токени автентифікації передаються в заголовку `Authorization: Bearer`, що автоматично захищає API від класичного CSRF (браузер не підставляє заголовок автоматично при cross-site запитах).\n  - Cookie з `Refresh Token` обов'язково маркується `SameSite=Strict`.\n- **Конфігурація CORS**:\n  - `Access-Control-Allow-Origin`: суворо білий список дозволених доменів клієнта (`https://nomnomsave.ua`, `https://app.nomnomsave.ua`). Заборонено використання wildcard `*` разом з передачею credentials.\n  - `Access-Control-Allow-Methods`: GET, POST, PUT, PATCH, DELETE, OPTIONS.\n  - `Access-Control-Allow-Headers`: Content-Type, Authorization, Idempotency-Key.\n  - `Access-Control-Max-Age`: 86400 (кешування Preflight запиту OPTIONS на 24 години).\n\n## Приклад\nБраузер клієнта перед виконанням `POST /api/v1/orders` надсилає автоматичний передзапит:\n```http\nOPTIONS /api/v1/orders HTTP/1.1\nOrigin: https://app.nomnomsave.ua\nAccess-Control-Request-Method: POST\n```\nСервер відповідає `204 No Content` із відповідними CORS-заголовками.\n\n## Пов'язані нотатки\n- Authentication-and-JWT-Handling\n- Rate-Limiting-and-429\n- REST-Architectural-Constraints\n</note>",
+      "thought": "Читаю повну нотатку 04-Security-and-Errors/CSRF-and-CORS-Protection.md для деталізації"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "args": {
+        "answer": "Одночасний захист від CSRF та викрадення сесії базується на розділенні токенів та налаштуваннях CORS. Згідно з [[CSRF-and-CORS-Protection#Ключові положення]], конфігурація CORS суворо обмежує `Access-Control-Allow-Origin` дозволеними доменами без wildcard, а токени оновлення ізолюються в cookie з атрибутом `SameSite=Strict`."
+      },
+      "observation": "FINISHED",
+      "thought": "Сформовано обґрунтовану фінальну відповідь"
+    }
+  ]
+}
