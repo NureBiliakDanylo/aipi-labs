@@ -1,0 +1,21 @@
+[project]
+name = "lab03-mas"
+version = "1.0.0"
+description = "Multi-agent Bug Report Triage System for Nom-Nom-Save REST API (Lab 03)"
+authors = [
+    {name = "Danylo Biliak", email = "danylo.biliak@nure.ua"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-adk>=2.9.2,<3.0.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+

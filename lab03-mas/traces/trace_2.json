@@ -1,0 +1,176 @@
+{
+  "state": {
+    "drafts": 2,
+    "feedback": "Перевірте поведінку checkout при додаванні від'ємного лота.",
+    "format_issues": [],
+    "request": "Ендпоінт створення нового лота надлишкової продукції ресторану POST /api/v1/products/lots приймає від'ємні ціни (price = -50.00 UAH) та нульові терміни придатності без валідації на бекенді, що дозволяє користувачам додавати лоти з від'ємною вартістю в кошик і зменшувати фінальну суму замовлення.",
+    "classification": {
+      "component": "products",
+      "category": "Security",
+      "title": "Ін'єкція від'ємної ціни при створенні лота надлишкової продукції",
+      "summary": "Відсутня серверна валідація поля price при виклику POST /api/v1/products/lots.",
+      "suggested_severity": "Critical"
+    },
+    "reproduction": {
+      "steps_to_reproduce": [
+        "Авторизуватися як заклад-партнер ресторану.",
+        "Надіслати POST /api/v1/products/lots з тілом {\"price\": -50.00, \"quantity\": 5}.",
+        "Отримати HTTP 201 Created та id створеного лота.",
+        "Додати лот у кошик покупця та перевірити, що загальна вартість замовлення зменшується."
+      ],
+      "http_method": "POST",
+      "endpoint": "/api/v1/products/lots",
+      "request_payload": "{\"restaurant_id\": 12, \"title\": \"Круасани\", \"price\": -50.00, \"quantity\": 5}",
+      "expected_status": 400,
+      "actual_status": 201
+    },
+    "impact": {
+      "business_impact": "Financial",
+      "blast_radius": "System-wide",
+      "security_risk": "Пряма фінансова вразливість: шахрайське зменшення суми чека до нуля або мінуса.",
+      "affected_stakeholders": [
+        "Платформа Nom-Nom-Save",
+        "Ресторани-партнери"
+      ],
+      "financial_risk_score": 5
+    },
+    "verdict": {
+      "decision": "APPROVE",
+      "severity": "Critical",
+      "priority": "P1",
+      "triage_rationale": "Критична фінансова вразливість дозволяє замовляти їжу безкоштовно та списувати кошти платформи. Severity=Critical, Priority=P1.",
+      "comments": []
+    },
+    "stop_reason": "approved",
+    "report": "# [Тріаж] Ін'єкція від'ємної ціни при створенні лота надлишкової продукції\n\n**Компонент API:** `products` | **Категорія:** `Security`\n**Суть дефекту:** Відсутня серверна валідація поля price при виклику POST /api/v1/products/lots.\n\n## 1. Відтворення дефекту (Reproduction)\n- **HTTP Запит:** `POST /api/v1/products/lots`\n- **Тіло запиту (Payload):** `{\"restaurant_id\": 12, \"title\": \"Круасани\", \"price\": -50.00, \"quantity\": 5}`\n- **Очікуваний статус:** `400` | **Фактичний статус:** `201`\n\n**Кроки відтворення:**\n  1. Авторизуватися як заклад-партнер ресторану.\n  2. Надіслати POST /api/v1/products/lots з тілом {\"price\": -50.00, \"quantity\": 5}.\n  3. Отримати HTTP 201 Created та id створеного лота.\n  4. Додати лот у кошик покупця та перевірити, що загальна вартість замовлення зменшується.\n\n## 2. Оцінка впливу та ризиків (Impact Analysis)\n- **Вплив на бізнес:** Financial\n- **Радіус ураження (Blast Radius):** System-wide\n- **Фінансовий ризик:** 5/5\n- **Безпековий ризик:** Пряма фінансова вразливість: шахрайське зменшення суми чека до нуля або мінуса.\n- **Зачеплені стейкхолдери:** Платформа Nom-Nom-Save, Ресторани-партнери\n\n## 3. Рішення тріажу (Triage Verdict)\n- **Severity:** **Critical** | **Priority:** **P1**\n- **Рішення:** `APPROVE` (після 2 чернетки/ок, причина зупинки: `approved`)\n- **Обґрунтування:** Критична фінансова вразливість дозволяє замовляти їжу безкоштовно та списувати кошти платформи. Severity=Critical, Priority=P1."
+  },
+  "trace": [
+    {
+      "t": 0.02,
+      "author": "triage_team",
+      "node": "intake@1",
+      "route": "ok",
+      "text": ""
+    },
+    {
+      "t": 0.03,
+      "author": "classifier",
+      "node": "classifier@1",
+      "route": null,
+      "text": "{\"component\": \"products\", \"category\": \"Security\", \"title\": \"Ін'єкція від'ємної ціни при створенні лота надлишкової продукції\", \"summary\": \"Відсутня серверна валідація поля price при виклику POST /api/v1/products/lots.\", \"suggested_severity\": \"Critical\"}"
+    },
+    {
+      "t": 0.06,
+      "author": "reproducer",
+      "node": "reproducer@1",
+      "route": null,
+      "text": "{\"steps_to_reproduce\": [\"Авторизуватися як заклад-партнер ресторану.\", \"Надіслати POST /api/v1/products/lots з тілом {\\\"price\\\": -50.00, \\\"quantity\\\": 5}.\", \"Отримати HTTP 201 Created та id створеного лота.\", \"Додати лот у кошик покупця та перевірити, що загальна вартість замовлення зменшується.\"], "
+    },
+    {
+      "t": 0.06,
+      "author": "impact_analyst",
+      "node": "impact_analyst@1",
+      "route": null,
+      "text": "{\"business_impact\": \"Financial\", \"blast_radius\": \"System-wide\", \"security_risk\": \"Пряма фінансова вразливість: шахрайське зменшення суми чека до нуля або мінуса.\", \"affected_stakeholders\": [\"Платформа Nom-Nom-Save\", \"Ресторани-партнери\"], \"financial_risk_score\": 5}"
+    },
+    {
+      "t": 0.07,
+      "author": "triage_team",
+      "node": "reviews@1",
+      "route": null,
+      "text": ""
+    },
+    {
+      "t": 0.08,
+      "author": "triage_lead",
+      "node": "triage_lead@1",
+      "route": null,
+      "text": "{\"decision\": \"REVISE\", \"severity\": \"High\", \"priority\": \"P2\", \"triage_rationale\": \"Потрібно уточнити вплив на кошик замовлень.\", \"comments\": [\"Перевірте поведінку checkout при додаванні від'ємного лота.\"]}"
+    },
+    {
+      "t": 0.09,
+      "author": "triage_team",
+      "node": "format_check@1",
+      "route": "ok",
+      "text": ""
+    },
+    {
+      "t": 0.09,
+      "author": "triage_team",
+      "node": "gate@1",
+      "route": "revise",
+      "text": ""
+    },
+    {
+      "t": 0.1,
+      "author": "classifier",
+      "node": "classifier@2",
+      "route": null,
+      "text": "{\"component\": \"products\", \"category\": \"Security\", \"title\": \"Ін'єкція від'ємної ціни при створенні лота надлишкової продукції\", \"summary\": \"Відсутня серверна валідація поля price при виклику POST /api/v1/products/lots.\", \"suggested_severity\": \"Critical\"}"
+    },
+    {
+      "t": 0.13,
+      "author": "reproducer",
+      "node": "reproducer@2",
+      "route": null,
+      "text": "{\"steps_to_reproduce\": [\"Авторизуватися як заклад-партнер ресторану.\", \"Надіслати POST /api/v1/products/lots з тілом {\\\"price\\\": -50.00, \\\"quantity\\\": 5}.\", \"Отримати HTTP 201 Created та id створеного лота.\", \"Додати лот у кошик покупця та перевірити, що загальна вартість замовлення зменшується.\"], "
+    },
+    {
+      "t": 0.13,
+      "author": "impact_analyst",
+      "node": "impact_analyst@2",
+      "route": null,
+      "text": "{\"business_impact\": \"Financial\", \"blast_radius\": \"System-wide\", \"security_risk\": \"Пряма фінансова вразливість: шахрайське зменшення суми чека до нуля або мінуса.\", \"affected_stakeholders\": [\"Платформа Nom-Nom-Save\", \"Ресторани-партнери\"], \"financial_risk_score\": 5}"
+    },
+    {
+      "t": 0.13,
+      "author": "triage_team",
+      "node": "reviews@2",
+      "route": null,
+      "text": ""
+    },
+    {
+      "t": 0.14,
+      "author": "triage_lead",
+      "node": "triage_lead@2",
+      "route": null,
+      "text": "{\"decision\": \"APPROVE\", \"severity\": \"Critical\", \"priority\": \"P1\", \"triage_rationale\": \"Критична фінансова вразливість дозволяє замовляти їжу безкоштовно та списувати кошти платформи. Severity=Critical, Priority=P1.\", \"comments\": []}"
+    },
+    {
+      "t": 0.15,
+      "author": "triage_team",
+      "node": "format_check@2",
+      "route": "ok",
+      "text": ""
+    },
+    {
+      "t": 0.16,
+      "author": "triage_team",
+      "node": "gate@2",
+      "route": "publish",
+      "text": ""
+    },
+    {
+      "t": 0.17,
+      "author": "triage_team",
+      "node": "publish@1",
+      "route": null,
+      "text": "# [Тріаж] Ін'єкція від'ємної ціни при створенні лота надлишкової продукції\n\n**Компонент API:** `products` | **Категорія:** `Security`\n**Суть дефекту:** Відсутня серверна валідація поля price при виклику POST /api/v1/products/lots.\n\n## 1. Відтворення дефекту (Reproduction)\n- **HTTP Запит:** `POST /ap"
+    }
+  ],
+  "llm_calls": {
+    "classifier": 2,
+    "reproducer": 2,
+    "impact_analyst": 2,
+    "triage_lead": 2
+  },
+  "tokens": {
+    "classifier": 500,
+    "reproducer": 500,
+    "impact_analyst": 500,
+    "triage_lead": 500
+  },
+  "seconds": 0.17,
+  "request": "Ендпоінт створення нового лота надлишкової продукції ресторану POST /api/v1/products/lots приймає від'ємні ціни (price = -50.00 UAH) та нульові терміни придатності без валідації на бекенді, що дозволяє користувачам додавати лоти з від'ємною вартістю в кошик і зменшувати фінальну суму замовлення.",
+  "scenario": "Revision loop triage (Draft 1: REVISE -> Draft 2: APPROVE)"
+}

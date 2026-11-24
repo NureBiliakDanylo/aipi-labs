@@ -1,0 +1,11 @@
+id,system,component,category,steps_count,format_issues,fin_risk_score,severity,priority,drafts,stop_reason,llm_calls,tokens,seconds,quality_score
+R1,team,orders,Functional,4,0,4,Critical,P1,1,approved,4,1000,0.29,2
+R1,solo,orders,Functional,2,0,3,High,P2,1,single_call,1,250,0.01,1
+R2,team,auth,Functional,4,0,3,High,P2,1,approved,4,1000,0.09,2
+R2,solo,auth,Functional,2,0,2,Medium,P3,1,single_call,1,250,0.01,1
+R3,team,products,Security,4,0,5,Critical,P1,2,approved,8,2000,0.16,2
+R3,solo,products,Functional,2,0,3,Medium,P3,1,single_call,1,250,0.01,1
+R4,team,billing,Functional,4,0,4,High,P1,1,approved,4,1000,0.08,2
+R4,solo,billing,Functional,2,0,3,Medium,P2,1,single_call,1,250,0.01,1
+R5,team,orders,Performance,4,0,2,Medium,P3,1,approved,4,1000,0.08,2
+R5,solo,orders,Performance,2,0,1,Low,P4,1,single_call,1,250,0.01,1

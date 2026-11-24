@@ -1,0 +1,128 @@
+{
+  "state": {
+    "drafts": 1,
+    "feedback": "",
+    "format_issues": [],
+    "request": "При одночасному бронюванні останнього акційного продуктового набору двома користувачами через POST /api/v1/orders/reserve обидва отримують HTTP 200 OK і підтвердження, що призводить до продажу одного лота двічі (double-booking) та розбіжності залишків у пекарні «Croissant de Paris».",
+    "classification": {
+      "component": "orders",
+      "category": "Functional",
+      "title": "Овербукінг лотів при конкурентному бронюванні",
+      "summary": "Відсутнє блокування рядка лота при одночасних запитах POST /api/v1/orders/reserve.",
+      "suggested_severity": "High"
+    },
+    "reproduction": {
+      "steps_to_reproduce": [
+        "Створити лот із залишком quantity=1 у пекарні 'Croissant de Paris'.",
+        "Надіслати два одночасні запити POST /api/v1/orders/reserve від двох покупців.",
+        "Перевірити HTTP-відповіді обох клієнтів (обидва отримують 200 OK).",
+        "Перевірити стан залишку лота в PostgreSQL (кількість стає -1)."
+      ],
+      "http_method": "POST",
+      "endpoint": "/api/v1/orders/reserve",
+      "request_payload": "{\"lot_id\": 402, \"customer_id\": 991, \"quantity\": 1}",
+      "expected_status": 409,
+      "actual_status": 200
+    },
+    "impact": {
+      "business_impact": "Financial",
+      "blast_radius": "System-wide",
+      "security_risk": "Порушення транзакційної цілісності та узгодженості залишків.",
+      "affected_stakeholders": [
+        "Покупці",
+        "Партнерські заклади",
+        "Фінанси"
+      ],
+      "financial_risk_score": 4
+    },
+    "verdict": {
+      "decision": "APPROVE",
+      "severity": "Critical",
+      "priority": "P1",
+      "triage_rationale": "Конкурентний стан гонитви призводить до овербукінгу та прямих збитків ресторану. Severity=Critical, Priority=P1.",
+      "comments": []
+    },
+    "stop_reason": "approved",
+    "report": "# [Тріаж] Овербукінг лотів при конкурентному бронюванні\n\n**Компонент API:** `orders` | **Категорія:** `Functional`\n**Суть дефекту:** Відсутнє блокування рядка лота при одночасних запитах POST /api/v1/orders/reserve.\n\n## 1. Відтворення дефекту (Reproduction)\n- **HTTP Запит:** `POST /api/v1/orders/reserve`\n- **Тіло запиту (Payload):** `{\"lot_id\": 402, \"customer_id\": 991, \"quantity\": 1}`\n- **Очікуваний статус:** `409` | **Фактичний статус:** `200`\n\n**Кроки відтворення:**\n  1. Створити лот із залишком quantity=1 у пекарні 'Croissant de Paris'.\n  2. Надіслати два одночасні запити POST /api/v1/orders/reserve від двох покупців.\n  3. Перевірити HTTP-відповіді обох клієнтів (обидва отримують 200 OK).\n  4. Перевірити стан залишку лота в PostgreSQL (кількість стає -1).\n\n## 2. Оцінка впливу та ризиків (Impact Analysis)\n- **Вплив на бізнес:** Financial\n- **Радіус ураження (Blast Radius):** System-wide\n- **Фінансовий ризик:** 4/5\n- **Безпековий ризик:** Порушення транзакційної цілісності та узгодженості залишків.\n- **Зачеплені стейкхолдери:** Покупці, Партнерські заклади, Фінанси\n\n## 3. Рішення тріажу (Triage Verdict)\n- **Severity:** **Critical** | **Priority:** **P1**\n- **Рішення:** `APPROVE` (після 1 чернетки/ок, причина зупинки: `approved`)\n- **Обґрунтування:** Конкурентний стан гонитви призводить до овербукінгу та прямих збитків ресторану. Severity=Critical, Priority=P1."
+  },
+  "trace": [
+    {
+      "t": 0.03,
+      "author": "triage_team",
+      "node": "intake@1",
+      "route": "ok",
+      "text": ""
+    },
+    {
+      "t": 0.22,
+      "author": "classifier",
+      "node": "classifier@1",
+      "route": null,
+      "text": "{\"component\": \"orders\", \"category\": \"Functional\", \"title\": \"Овербукінг лотів при конкурентному бронюванні\", \"summary\": \"Відсутнє блокування рядка лота при одночасних запитах POST /api/v1/orders/reserve.\", \"suggested_severity\": \"High\"}"
+    },
+    {
+      "t": 0.24,
+      "author": "reproducer",
+      "node": "reproducer@1",
+      "route": null,
+      "text": "{\"steps_to_reproduce\": [\"Створити лот із залишком quantity=1 у пекарні 'Croissant de Paris'.\", \"Надіслати два одночасні запити POST /api/v1/orders/reserve від двох покупців.\", \"Перевірити HTTP-відповіді обох клієнтів (обидва отримують 200 OK).\", \"Перевірити стан залишку лота в PostgreSQL (кількість "
+    },
+    {
+      "t": 0.25,
+      "author": "impact_analyst",
+      "node": "impact_analyst@1",
+      "route": null,
+      "text": "{\"business_impact\": \"Financial\", \"blast_radius\": \"System-wide\", \"security_risk\": \"Порушення транзакційної цілісності та узгодженості залишків.\", \"affected_stakeholders\": [\"Покупці\", \"Партнерські заклади\", \"Фінанси\"], \"financial_risk_score\": 4}"
+    },
+    {
+      "t": 0.25,
+      "author": "triage_team",
+      "node": "reviews@1",
+      "route": null,
+      "text": ""
+    },
+    {
+      "t": 0.26,
+      "author": "triage_lead",
+      "node": "triage_lead@1",
+      "route": null,
+      "text": "{\"decision\": \"APPROVE\", \"severity\": \"Critical\", \"priority\": \"P1\", \"triage_rationale\": \"Конкурентний стан гонитви призводить до овербукінгу та прямих збитків ресторану. Severity=Critical, Priority=P1.\", \"comments\": []}"
+    },
+    {
+      "t": 0.27,
+      "author": "triage_team",
+      "node": "format_check@1",
+      "route": "ok",
+      "text": ""
+    },
+    {
+      "t": 0.29,
+      "author": "triage_team",
+      "node": "gate@1",
+      "route": "publish",
+      "text": ""
+    },
+    {
+      "t": 0.3,
+      "author": "triage_team",
+      "node": "publish@1",
+      "route": null,
+      "text": "# [Тріаж] Овербукінг лотів при конкурентному бронюванні\n\n**Компонент API:** `orders` | **Категорія:** `Functional`\n**Суть дефекту:** Відсутнє блокування рядка лота при одночасних запитах POST /api/v1/orders/reserve.\n\n## 1. Відтворення дефекту (Reproduction)\n- **HTTP Запит:** `POST /api/v1/orders/res"
+    }
+  ],
+  "llm_calls": {
+    "classifier": 1,
+    "reproducer": 1,
+    "impact_analyst": 1,
+    "triage_lead": 1
+  },
+  "tokens": {
+    "classifier": 250,
+    "reproducer": 250,
+    "impact_analyst": 250,
+    "triage_lead": 250
+  },
+  "seconds": 0.3,
+  "request": "При одночасному бронюванні останнього акційного продуктового набору двома користувачами через POST /api/v1/orders/reserve обидва отримують HTTP 200 OK і підтвердження, що призводить до продажу одного лота двічі (double-booking) та розбіжності залишків у пекарні «Croissant de Paris».",
+  "scenario": "Happy path bug triage (1 round, APPROVE)"
+}
